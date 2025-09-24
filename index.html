@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会話スピーチ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .select-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 25px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #007BFF, #00c4b4);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #0056b3, #009688);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #topicDisplay {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            line-height: 1.6;
+            font-size: 1.1em;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        #topicDisplay strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: #00c4b4;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            select, button {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            .select-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>会話スピーチ</h1>
+        <div class="select-container">
+            <select id="testSelect">
+                <option value="4-12">Test 4-12</option>
+                <option value="17-19">Test 17-19</option>
+                <option value="20-25">Test 20-25</option>
+                <option value="26-30">Test 26-30</option>
+                <option value="31-35">Test 31-35</option>
+                <option value="36-40">Test 36-40</option>
+                <option value="41-45">Test 41-45</option>
+                <option value="46-50">Test 46-50</option>
+            </select>
+            <button onclick="displayRandomTopic()">開始</button>
+        </div>
+        <div id="topicDisplay"></div>
+    </div>
+    <footer>
+        © 2025 Tài liệu kiểm tra | Thiết kế bởi <a href="#">Thuận</a>
+    </footer>
+
+    <script>
+        const topics = {
+            "4-12": [
+                { vn: "Miêu tả về một ngày của bạn. (Buổi sáng, buổi chiều, buổi tối làm gì, vv…)", jp: "あなたの<ruby>１日<rt>いちにち</rt></ruby>について<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Hãy kể về lần về quê gần đây nhất của bạn (sử dụng 5W1H: Cùng ai, phương tiện, làm gì, thời gian….)", jp: "<ruby>最近<rt>さいきん</rt></ruby>の<ruby>故郷<rt>ふるさと</rt></ruby>での１日について<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Hãy kể về ngày chủ nhật tuần trước của bạn.", jp: "あなたは<ruby>先週<rt>せんしゅう</rt></ruby>の<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>何<rt>なに</rt></ruby>をしましたか。<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Chủ nhật tuần này bạn sẽ làm gì, hãy nói về nó.", jp: "<ruby>次<rt>つぎ</rt></ruby>の<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>何<rt>なに</rt></ruby>をしますか。<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Kể về một món quà bạn nhận được từ người bạn quý.", jp: "<ruby>好<rt>す</rt></ruby>きな<ruby>人<rt>ひと</rt></ruby>からもらったものについて<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Hãy kể lại một lần bạn đi du lịch (đã đi đâu, đi với ai, làm gì…?)", jp: "<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>ったことについて、<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Miêu tả một địa điểm bạn thường đến vào ngày nghỉ.", jp: "あなたが<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>、よく<ruby>行<rt>い</rt></ruby>っているところについて<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Hãy kể về ngày hôm qua của bạn.", jp: "あなたの<ruby>昨日<rt>きのう</rt></ruby>について<ruby>話<rt>はな</rt></ruby>してください。どんな<ruby>一日<rt>いちにち</rt></ruby>でしたか。" },
+                { vn: "Hãy giới thiệu về các thành viên trong gia đình của bạn.", jp: "あなたの<ruby>家族<rt>かぞく</rt></ruby>を<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Hãy giới thiệu về sở thích của bạn.", jp: "あなたの<ruby>趣味<rt>しゅみ</rt></ruby>について<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Bạn hãy miêu tả tình trạng căn phòng hiện tại có những gì, có những ai, vị trí cụ thể.", jp: "<ruby>今<rt>いま</rt></ruby>いる<ruby>部屋<rt>へや</rt></ruby>について、<ruby>話<rt>はな</rt></ruby>してください。<ruby>どこに何<rt>なに</rt></ruby>がありますか。<ruby>誰<rt>だれ</rt></ruby>がいますか。" },
+                { vn: "Trong lớp bạn quý ai nhất. Hãy tả về người đó.", jp: "<ruby>クラスで誰<rt>だれ</rt></ruby>が<ruby>一番<rt>いちばん</rt></ruby><ruby>好<rt>す</rt></ruby>きですか。その<ruby>人<rt>ひと</rt></ruby>について<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Hãy miêu tả về căn phòng bạn đang ở. Trong phòng có những đồ vật gì và vị trí của nó ở đâu.", jp: "あなたが<ruby>今<rt>いま</rt></ruby><ruby>住<rt>す</rt></ruby>んでいる<ruby>部屋<rt>へヤ</rt></ruby>に<ruby>何<rt>なに</rt></ruby>がありますか。そのものは<ruby>部屋<rt>へや</rt></ruby>のどこにありますか。<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Hãy giới thiệu về Trung tâm ITM – nơi mà bạn đang học tiếng Nhật.", jp: "あなたが<ruby>勉強<rt>べんきょう</rt></ruby>しているITM<ruby>日本語<rt>にほんご</rt></ruby>センターについて<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Hãy giới thiệu và miêu tả về mẹ của bạn.", jp: "あなたのお<ruby>母<rt>かあ</rt></ruby>さんについて、<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Hãy giới thiệu về nhà của bạn ở quê.", jp: "あなたの<ruby>故郷<rt>ふるさと</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>について<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Hãy giới thiệu và miêu tả về bố của bạn.", jp: "<ruby>あなたのお父<rt>とう</rt></ruby>さんについて、<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Hãy giới thiệu về Hà Nội/Đà Nẵng/Hồ Chí Minh/Dak Lak với một người bạn Nhật của bạn. (ví dụ: Món ăn, địa điểm, giao thông…)", jp: "<ruby>日本人<rt>にほんじん</rt></ruby>の<ruby>友<rt>とも</rt></ruby>だちにハノイ/ダナン/ホーチミン/ダックラックについて<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Hãy giới thiệu và miêu tả về người mà bạn quý (thích) nhất.", jp: "あなたのいちばん<ruby>好<rt>す</rt></ruby>きな<ruby>人<rt>ひと</rt></ruby>について、<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Hãy giới thiệu và miêu tả về món đồ mà bạn trân quý nhất.", jp: "あなたのいちばん<ruby>好<rt>す</rt></ruby>きなもの（<ruby>大切<rt>たいせつ</rt></ruby>なもの）を<ruby>紹介<rt>しょうかい</rt></ruby>してください。" }
+            ],
+            "17-19": [
+                { vn: "Hãy kể về những điều bạn muốn làm trong tương lai.", jp: "<ruby>将来<rt>しょうらい</rt></ruby>何<rt>なに</rt>をしたいですか。<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Hãy kể về những điều bạn muốn làm ở Nhật.", jp: "<ruby>日本<rt>にほん</rt></ruby>でしたいことを<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Hãy giới thiệu về một số quy tắc ở Trung tâm tiếng Nhật ITM.", jp: "ITMセンターの<ruby>規則<rt>きそく</rt></ruby>（ルール）を<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Trước khi học ở Trung tâm ITM, bạn đã ở đâu và làm gì? Hãy kể về khoảng thời gian đó nhé.", jp: "ITMセンターに<ruby>入<rt>はい</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>にどこで、何をしましたか。その<ruby>時間<rt>じかん</rt></ruby>について<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Hãy nói về khả năng bạn có thể làm được một việc gì đấy mà bạn cho là không phải ai cũng làm được.", jp: "<ruby>あなたは特技<rt>とくぎ</rt></ruby>が／<ruby>他<rt>ほか</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>より<ruby>上<rt>うわ</rt></ruby>手にできることがありますか。それについて<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Sử dụng mẫu 「〜てください」 để đưa ra một số yêu cầu cho 1 bạn học viên mới khi bạn hướng dẫn bạn ấy về nội quy Trung tâm ITM.", jp: "「〜てください」を<ruby>使<rt>つか</rt></ruby>って<ruby>後輩<rt>こうはい</rt></ruby>にITMセンターのルールを<ruby>案内<rt>あんない</rt></ruby>してください。" },
+                { vn: "Sử dụng mẫu 「〜てはいけません」 để đưa ra những chú ý trong công việc khi làm việc ở Nhật.", jp: "<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>くとき、<ruby>注意<rt>ちゅうい</rt></ruby>することを「〜てはいけません」を<ruby>使<rt>つか</rt></ruby>って<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Trước khi đi Nhật bạn phải làm những gì, bạn hãy kể về nó.", jp: "<ruby>あなたは日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く<ruby>前<rt>まえ</rt></ruby>に、何を<ruby>しなければなりません<rt>しなければなりません</rt></ruby>か。<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Với điện thoại của bạn, bạn có thể làm được những gì.", jp: "<ruby>あなたの携帯電話<rt>けいたいでんわ</rt></ruby>で何ができますか。" },
+                { vn: "Mỗi ngày bạn thường dùng điện thoại để làm những gì.", jp: "<ruby>あなたは毎日<rt>まいにち</rt></ruby>携帯電話を<ruby>使<rt>つか</rt></ruby>って、いつも何をしていますか。" },
+                { vn: "Hãy miêu tả/giới thiệu về một quán ăn hoặc một nhà hàng mà bạn thích.", jp: "<ruby>あなたが好<rt>す</rt></ruby>きな<ruby>店<rt>みせ</rt></ruby>やレストランについて<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Buổi sáng sau khi thức dậy đến hiện tại bạn đã làm những việc gì, hãy kể chi tiết nhé.", jp: "朝<ruby>起<rt>お</rt></ruby>きてから、今<rt>いま</rt>まで何をしましたか。<ruby>詳<rt>くわ</rt></ruby>しく<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Hãy nói về sở thích của bạn.", jp: "<ruby>あなたの趣味<rt>しゅみ</rt></ruby>を<ruby>紹介<rt>しょうかい</rt></ruby>してください。" },
+                { vn: "Từ trước đến nay bạn đã từng tổ chức / tham gia những buổi tiệc nào? Hãy kể về 1 buổi tiệc mà bạn thấy đáng nhớ nhất nhé.", jp: "<ruby>あなたは今<rt>いま</rt></ruby>まで、どんなパーティーをしたこと／<ruby>参加<rt>さんか</rt></ruby>したことがありますか。その中で、いちばん<ruby>思い出<rt>おもいで</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>っているパーティーについて<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Đồ vật bạn muốn có nhất là gì? Lý do vì sao bạn muốn có nó?", jp: "今<rt>いま</rt>いちばん<ruby>欲<rt>ほ</rt></ruby>しいものはなんですか？どうしてですか。<ruby>話<rt>はな</rt></ruby>してください。" },
+                { vn: "Từ trước đến nay bạn đã từng đi đâu chơi xa chưa? Bạn đã làm những gì ở đó? Hãy kể về nó nhé.", jp: "<ruby>あなたが今<rt>いま</rt></ruby>までどこへ<ruby>行<rt>い</rt></ruby>ったことがありますか。そこで何をしましたか。<ruby>話<rt>はな</rt></ruby>してください。" }
+            ],
+            "20-25": [
+        { vn: "Khi bạn bị ốm/bị bệnh, ai đó đã làm những gì để giúp đỡ bạn. Hãy kể về nó.", jp: "あなたが<ruby>病気<rt>びょうき</rt></ruby>のとき、<ruby>誰<rt>だれ</rt></ruby>が何をしてくれましたか。<ruby>話<rt>はな</rt></ruby>してください。" },
+        { vn: "Hãy kể về 1 lần bạn được bạn của mình làm cho/giúp đỡ cho việc gì đó.", jp: "<ruby>友<rt>とも</rt></ruby>だちがあなたに<ruby>親切<rt>しんせつ</rt></ruby>にしてくれたことについて、<ruby>話<rt>はな</rt></ruby>してください。" },
+        { vn: "Bạn nghĩ như thế nào về cuộc sống ở thành phố hiện tại bạn đang sống.", jp: "<ruby>住<rt>す</rt></ruby>んでいる<ruby>町<rt>まち</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>についてどう<ruby>思<rt>おも</rt></ruby>いますか。" },
+        { vn: "Bạn nghĩ như thế nào về nội quy, thời gian, việc học… ở Trung tâm ITM.", jp: "ITM<ruby>日本語<rt>にほんご</rt></ruby>センターの<ruby>規則<rt>きそく</rt></ruby>（ルール）や<ruby>勉強<rt>べんきょう</rt></ruby>のスケジュールなどについてどう<ruby>思<rt>おも</rt></ruby>いますか。" },
+        { vn: "Ở trung tâm ITM, khi bạn làm việc gì thì bạn cảm thấy vui nhất.", jp: "あなたはITMセンターで何をしたとき、いちばん<ruby>楽<rt>たの</rt></ruby>しかったですか。" },
+        { vn: "Bạn có nghĩ rằng Việt Nam sẽ trở nên tiện lợi hơn trong tương lai không? Bạn nghĩ điều gì sẽ trở nên tiện lợi hơn.", jp: "ベトナムはこれからもっと<ruby>便利<rt>べんり</rt></ruby>になると思<rt>おも</rt>いますか。何が<ruby>便利<rt>べんり</rt></ruby>になると思<rt>おも</rt>いますか。<ruby>話<rt>はな</rt></ruby>してください。" },
+        { vn: "Vào ngày sinh nhật hoặc 1 ngày đặc biệt nào đó, bạn đã được bạn bè/gia đình/người thân làm gì cho mình? Hãy kể về điều đó.", jp: "あなたの<ruby>誕生日<rt>たんじょうび</rt></ruby>／<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>日<rt>ひ</rt></ruby>に<ruby>友達<rt>ともだち</rt></ruby>／<ruby>家族<rt>かぞく</rt></ruby>がどんなことをしてくれましたか。<ruby>話<rt>はな</rt></ruby>してください。" },
+        { vn: "Hãy kể về những việc bạn thường làm khi buồn.", jp: "<ruby>悲<rt>かな</rt></ruby>しい<ruby>時<rt>とき</rt></ruby>に何をしますか。<ruby>話<rt>はな</rt></ruby>してください。" },
+        { vn: "Hãy hướng dẫn cho một người bạn của bạn cách đi từ Trung tâm ITM về quê của bạn.", jp: "<ruby>友<rt>とも</rt></ruby>だちにITMセンターから<ruby>あなたの故郷<rt>ふるさと</rt></ruby>への<ruby>行<rt>い</rt></ruby>き<ruby>方<rt>かた</rt></ruby>を<ruby>案内<rt>あんない</rt></ruby>してください。" },
+        { vn: "Hãy kể về những điều bạn được hướng dẫn khi lần đầu tiên đến Trung tâm ITM.", jp: "<ruby>初<rt>はじ</rt></ruby>めてITMセンターに<ruby>来<rt>き</rt></ruby>た<ruby>日<rt>ひ</rt></ruby>のことを<ruby>話<rt>はな</rt></ruby>してください。" },
+        { vn: "Bạn muốn làm gì khi bạn bao nhiêu tuổi? Hãy sử dụng mẫu câu 「○歳になったら」 để kể về nó nhé.", jp: "<ruby>何歳<rt>なんさい</rt></ruby>で、何をしたいですか。「○<ruby>歳<rt>さい</rt></ruby>になったら」を<ruby>使<rt>つか</rt></ruby>って<ruby>話<rt>はな</rt></ruby>してください。" },
+        { vn: "Nếu có 1 tuần nghỉ bạn sẽ làm gì?", jp: "<ruby>休<rt>やす</rt></ruby>みが１<ruby>週間<rt>しゅうかん</rt></ruby>あったら、なにをしますか。" },
+        { vn: "Nếu sinh ra là con trai/con gái, bạn muốn làm gì?", jp: "<ruby>もし女<rt>おんな</rt></ruby>／<ruby>男<rt>おとこ</rt></ruby>だったら、何をしたいですか。" },
+        { vn: "Nếu có thật nhiều tiền bạn muốn làm gì? Làm cho ai?", jp: "<ruby>お金<rt>かね</rt></ruby>がたくさんあったら、<ruby>誰<rt>だれ</rt></ruby>に何をしてあげたいですか。" },
+        { vn: "Trước khi đi Nhật hoặc trước khi vào học ở ITM bạn đã được bạn bè, người thân khuyên hoặc dặn dò những điều gì? Bạn nghĩ gì về những điều đó? Hãy kể về nó nhé.", jp: "<ruby>日本<rt>にほん</rt></ruby>に<ruby>行<rt>い</rt></ruby>く<ruby>前<rt>まえ</rt></ruby>／ITMセンターに<ruby>入<rt>はい</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に<ruby>友達<rt>ともだち</rt></ruby>や<ruby>家族<rt>かぞく</rt></ruby>が<ruby>あなたにどんなことを言<rt>い</rt></ruby>いましたか。どう<ruby>思<rt>おも</rt></ruby>いますか。それを<ruby>話<rt>はな</rt></ruby>してください。" }
+    ],
+            "26-30": [],
+            "31-35": [],
+            "36-40": [],
+            "41-45": [],
+            "46-50": []
+        };
+
+        function displayRandomTopic() {
+            const testSelect = document.getElementById("testSelect").value;
+            const topicList = topics[testSelect];
+            if (topicList.length === 0) {
+                document.getElementById("topicDisplay").innerHTML = "このテストのトピックはまだありません。";
+                return;
+            }
+            const randomIndex = Math.floor(Math.random() * topicList.length);
+            const topic = topicList[randomIndex];
+            document.getElementById("topicDisplay").innerHTML = `<strong>Tiếng việt:</strong> ${topic.vn}<br><strong>Tiếng nhật:</strong> ${topic.jp}`;
+        }
+    </script>
+</body>
+</html>
